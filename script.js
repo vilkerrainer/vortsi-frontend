@@ -15,7 +15,9 @@ document.getElementById("buy-btn").addEventListener("click", async () => {
     if (!response.ok) throw new Error("Erro ao criar preferência");
 
     const result = await response.json();
-    window.location.href = result.init_point; // redireciona pro checkout Mercado Pago
+
+    // Redireciona para a URL do checkout do Mercado Pago
+    window.location.href = result.init_point;
   } catch (err) {
     alert("Erro ao iniciar pagamento. Veja o console.");
     console.error(err);
