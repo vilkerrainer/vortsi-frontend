@@ -1,33 +1,38 @@
-body {
+/* Centraliza conteúdo e deixa a página com visual clean */
+body, html {
+  height: 100%;
+  margin: 0;
   font-family: Arial, sans-serif;
-  padding: 20px;
-  max-width: 600px;
-  margin: auto;
-  background-color: #f8f8f8;
-}
-
-form {
+  background: #f0f2f5;
   display: flex;
-  flex-direction: column;
-  gap: 15px;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
+  justify-content: center;
+  align-items: center;
 }
 
-input, button {
-  padding: 10px;
-  font-size: 1em;
+.container {
+  text-align: center;
+  background: white;
+  padding: 40px 60px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+h1 {
+  margin-bottom: 24px;
+  color: #333;
 }
 
 button {
-  background-color: #009ee3;
+  background-color: #3483fa;
   color: white;
   border: none;
+  padding: 15px 40px;
+  font-size: 18px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #0078b0;
+  background-color: #2968c8;
 }
