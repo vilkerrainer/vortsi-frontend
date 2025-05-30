@@ -8,7 +8,7 @@ document.getElementById("checkout-form").addEventListener("submit", async (e) =>
   };
 
   try {
-    const response = await fetch("http://localhost:5000/create_preference", {
+    const response = await fetch("https://vortsi-bakcend.onrender.com", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
