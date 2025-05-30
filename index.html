@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pagamento com Mercado Pago</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Pagamento com Mercado Pago</h1>
+  
+  <form id="checkout-form">
+    <label for="title">Nome do Produto:</label>
+    <input type="text" id="title" name="title" required value="Produto Teste">
+
+    <label for="quantity">Quantidade:</label>
+    <input type="number" id="quantity" name="quantity" required value="1">
+
+    <label for="price">Preço Unitário:</label>
+    <input type="number" id="price" name="price" required step="0.01" value="10.00">
+
+    <button type="submit">Pagar com Mercado Pago</button>
+  </form>
+
+  <script src="script.js"></script>
+</body>
+</html>
