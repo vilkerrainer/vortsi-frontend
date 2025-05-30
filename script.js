@@ -1,3 +1,5 @@
+const backendUrl = "https://vortsi-bakcend.onrender.com";
+
 document.getElementById("checkout-form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -8,7 +10,7 @@ document.getElementById("checkout-form").addEventListener("submit", async (e) =>
   };
 
   try {
-    const response = await fetch("https://vortsi-bakcend.onrender.com", {
+    const response = await fetch(`${backendUrl}/create_preference`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
