@@ -1,38 +1,33 @@
-/* Centraliza conteúdo e deixa a página com visual clean */
-body, html {
-  height: 100%;
-  margin: 0;
+body {
   font-family: Arial, sans-serif;
-  background: #f0f2f5;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
 }
 
 .container {
-  text-align: center;
   background: white;
-  padding: 40px 60px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 30px 40px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  text-align: center;
 }
 
-h1 {
-  margin-bottom: 24px;
-  color: #333;
-}
-
-button {
+button#buy-btn {
   background-color: #3483fa;
   color: white;
   border: none;
-  padding: 15px 40px;
+  padding: 15px 30px;
   font-size: 18px;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-button:hover {
+button#buy-btn:hover {
   background-color: #2968c8;
 }
