@@ -1,23 +1,11 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #f2f2f2;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.container {
-  background: white;
-  padding: 30px 40px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   text-align: center;
+  margin-top: 100px;
+  background: #f9f9f9;
 }
 
-button#buy-btn {
+button {
   background-color: #3483fa;
   color: white;
   border: none;
@@ -25,9 +13,9 @@ button#buy-btn {
   font-size: 18px;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s;
 }
 
-button#buy-btn:hover {
+button:hover {
   background-color: #2968c8;
 }
