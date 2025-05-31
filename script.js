@@ -1,49 +1,117 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const buyBtn    = document.getElementById("buy-btn");
-  const msgField  = document.getElementById("msg");
-  const loginForm = document.getElementById("login-form");
-  const emailInput = document.getElementById("email");
-  const compraSec  = document.getElementById("compra");
+const backendUrl = "https://vortsi-bakcend.onrender.com"; // Mude para seu backend
 
-  let userEmail = "";
+let stripe = Stripe("pk_test_51RUgpE02xDEZEGxUBjyD0Wze06WfCn10KxnM8ekVy4kSoMXZqsqeUwU5in4LRLBhNqtfjEsZ1Ui3rbkh2xW4RITm00UBSQGY06"); // Substitua pela sua chave pública Stripe
 
-  loginForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    userEmail = emailInput.value.trim();
-    if (userEmail) {
-      compraSec.style.display = "block";
-      loginForm.style.display = "none";
-      msgField.innerText = `Logado como: ${userEmail}`;
+const elements = stripe.elements();
+const cardElement = elements.create("card");
+cardElement.mount("#card-element");
+
+const loginForm = document.getElementById("login-form");
+const paymentForm = document.getElementById("payment-form");
+const messageDiv = document.getElementById("message");
+const userInfoDiv = document.getElementById("user-info");
+const userNomeSpan = document.getElementById("user-nome");
+const userPagoSpan = document.getElementById("user-pago");
+const logoutBtn = document.getElementById("logout-btn");
+
+let userEmail = "";
+let userNome = "";
+let userPago = 0;
+
+loginForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  messageDiv.textContent = "";
+
+  const email = document.getElementById("email").value;
+  const senha = document.getElementById("senha").value;
+
+  try {
+    const res = await fetch(backendUrl + "/login", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, senha }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error || "Erro no login");
+
+    userEmail = email;
+    userNome = data.nome;
+    userPago = data.pago;
+
+    userNomeSpan.textContent = userNome;
+    userPagoSpan.textContent = userPago === 1 ? "Pago" : "Não pago";
+
+    loginForm.style.display = "none";
+    userInfoDiv.style.display = "block";
+  } catch (err) {
+    messageDiv.textContent = err.message;
+  }
+});
+
+paymentForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  messageDiv.textContent = "";
+  document.getElementById("pay-button").disabled = true;
+
+  const valor = parseFloat(document.getElementById("valor").value);
+
+  if (!valor || valor <= 0) {
+    messageDiv.textContent = "Informe um valor válido";
+    document.getElementById("pay-button").disabled = false;
+    return;
+  }
+
+  try {
+    // Pega client_secret do backend
+    const res = await fetch(backendUrl + "/create_payment_intent", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ valor, email: userEmail }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Erro ao criar pagamento");
+
+    const clientSecret = data.client_secret;
+
+    // Confirma o pagamento com Stripe.js
+    const result = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: cardElement,
+      },
+    });
+
+    if (result.error) {
+      messageDiv.textContent = result.error.message;
+      document.getElementById("pay-button").disabled = false;
+    } else if (result.paymentIntent.status === "succeeded") {
+      messageDiv.style.color = "green";
+      messageDiv.textContent = "Pagamento efetuado com sucesso!";
+
+      // Atualizar status pago no front (o backend será atualizado via webhook)
+      userPagoSpan.textContent = "Pago";
+      userPago = 1;
+      document.getElementById("pay-button").disabled = false;
     }
+  } catch (err) {
+    messageDiv.textContent = err.message;
+    document.getElementById("pay-button").disabled = false;
+  }
+});
+
+logoutBtn.addEventListener("click", async () => {
+  await fetch(backendUrl + "/logout", {
+    method: "POST",
+    credentials: "include",
   });
 
-  buyBtn.addEventListener("click", async () => {
-    msgField.innerText = "Gerando preferência…";
+  userEmail = "";
+  userNome = "";
+  userPago = 0;
 
-    const data = {
-      title: "BOT",
-      quantity: 1,
-      unit_price: 0.10,
-      payer_email: userEmail // envia o email junto
-    };
-
-    try {
-      const res = await fetch("https://vortsi-bakcend.onrender.com/create_preference", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || "Erro desconhecido");
-      }
-
-      const { init_point } = await res.json();
-      window.location.href = init_point;
-    } catch (err) {
-      msgField.innerText = "Erro: " + err.message;
-      console.error("Erro ao criar preferência:", err);
-    }
-  });
+  userInfoDiv.style.display = "none";
+  loginForm.style.display = "block";
+  messageDiv.textContent = "";
 });
