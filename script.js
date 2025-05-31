@@ -6,10 +6,10 @@ document.addEventListener("DOMContentLoaded", () => {
     msgField.innerText = "Gerando preferência…";
 
     const data = {
-      title: "BOT",
-      quantity: 1,
-      unit_price: 199.99
-      // payer_email pode ser enviado se quiser
+      title: "BOT",            // nome do produto
+      quantity: 1,             // quantidade
+      unit_price: 199.99       // valor unitário (em R$)
+      // opcional: incluir payer_email se quiser
     };
 
     try {
@@ -18,12 +18,19 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
       });
-      if (!res.ok) throw new Error(await res.text());
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || "Erro desconhecido");
+      }
+
       const { init_point } = await res.json();
-      window.location.href = init_point;   // redireciona ao Checkout Pro
+
+      // redireciona para o link do Mercado Pago
+      window.location.href = init_point;
     } catch (err) {
       msgField.innerText = "Erro: " + err.message;
-      console.error(err);
+      console.error("Erro ao criar preferência:", err);
     }
   });
 });
