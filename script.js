@@ -1,4 +1,5 @@
-const backendUrl = "https://vortsi-bakcend.onrender.com"; // Mude para seu backend
+const backendUrl = "https://vortsi-backend.onrender.com";
+
 
 let stripe = Stripe("pk_test_51RUgp1P3MA7BPdVed5FX9pQ2AJZ7jguWyoWFVYemb96sAptDX2gxW4op48ok5F1yp1v1xZFJPjbmb5vUsjt7vPu300ibpEFWRG"); // Substitua pela sua chave pública Stripe
 
