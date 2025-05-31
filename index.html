@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <title>Teste de Pagamento</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <h1>Pagamento Teste</h1>
-  <button onclick="comprar()">Comprar R$199,99</button>
-  <p id="resposta"></p>
-  <script src="script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Comprar BOT</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h2>Login rápido</h2>
+    <form id="login-form">
+      <input type="email" id="email" placeholder="Seu e-mail" required />
+      <button type="submit">Entrar</button>
+    </form>
+
+    <section id="compra" style="display:none; margin-top:40px;">
+      <button id="buy-btn">Comprar BOT por R$ 199,99</button>
+    </section>
+
+    <p id="msg" style="margin-top:20px; font-weight:bold;"></p>
+
+    <script src="script.js"></script>
+  </body>
 </html>
