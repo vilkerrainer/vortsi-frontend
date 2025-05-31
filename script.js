@@ -1,15 +1,30 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const buyBtn   = document.getElementById("buy-btn");
-  const msgField = document.getElementById("msg");
+  const buyBtn    = document.getElementById("buy-btn");
+  const msgField  = document.getElementById("msg");
+  const loginForm = document.getElementById("login-form");
+  const emailInput = document.getElementById("email");
+  const compraSec  = document.getElementById("compra");
+
+  let userEmail = "";
+
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    userEmail = emailInput.value.trim();
+    if (userEmail) {
+      compraSec.style.display = "block";
+      loginForm.style.display = "none";
+      msgField.innerText = `Logado como: ${userEmail}`;
+    }
+  });
 
   buyBtn.addEventListener("click", async () => {
     msgField.innerText = "Gerando preferência…";
 
     const data = {
-      title: "BOT",            // nome do produto
-      quantity: 1,             // quantidade
-      unit_price: 199.99       // valor unitário (em R$)
-      // opcional: incluir payer_email se quiser
+      title: "BOT",
+      quantity: 1,
+      unit_price: 199.99,
+      payer_email: userEmail // envia o email junto
     };
 
     try {
@@ -25,8 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const { init_point } = await res.json();
-
-      // redireciona para o link do Mercado Pago
       window.location.href = init_point;
     } catch (err) {
       msgField.innerText = "Erro: " + err.message;
