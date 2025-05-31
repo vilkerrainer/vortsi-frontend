@@ -2,43 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Bot Pagamento</title>
+  <title>Teste de Pagamento</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://sdk.mercadopago.com/js/v2"></script>
 </head>
 <body>
-  <h1>Bot Premium</h1>
-
-  <div id="register">
-    <h2>Registrar</h2>
-    <input type="text" id="reg_nome" placeholder="Nome" />
-    <input type="email" id="reg_email" placeholder="Email" />
-    <input type="password" id="reg_senha" placeholder="Senha" />
-    <button onclick="register()">Registrar</button>
-  </div>
-
-  <div id="login">
-    <h2>Login</h2>
-    <input type="email" id="login_email" placeholder="Email" />
-    <input type="password" id="login_senha" placeholder="Senha" />
-    <button onclick="login()">Login</button>
-  </div>
-
-  <div id="pagar" style="display:none;">
-    <h2>Pagar R$199,99</h2>
-    <form id="payment-form">
-      <input type="text" id="cardNumber" placeholder="Número do cartão" />
-      <input type="text" id="cardExpirationMonth" placeholder="Mês" />
-      <input type="text" id="cardExpirationYear" placeholder="Ano" />
-      <input type="text" id="securityCode" placeholder="CVV" />
-      <input type="text" id="cardholderName" placeholder="Nome impresso no cartão" />
-      <input type="email" id="payerEmail" placeholder="Seu e-mail" />
-      <button type="submit">Pagar</button>
-    </form>
-  </div>
-
-  <div id="status"></div>
-
+  <h1>Pagamento Teste</h1>
+  <button onclick="comprar()">Comprar R$199,99</button>
+  <p id="resposta"></p>
   <script src="script.js"></script>
 </body>
 </html>
