@@ -1,6 +1,6 @@
 const backendUrl = "https://vortsi-bakcend.onrender.com"; // Mude para seu backend
 
-let stripe = Stripe("pk_test_51RUgpE02xDEZEGxUBjyD0Wze06WfCn10KxnM8ekVy4kSoMXZqsqeUwU5in4LRLBhNqtfjEsZ1Ui3rbkh2xW4RITm00UBSQGY06"); // Substitua pela sua chave pública Stripe
+let stripe = Stripe("pk_test_51RUgp1P3MA7BPdVed5FX9pQ2AJZ7jguWyoWFVYemb96sAptDX2gxW4op48ok5F1yp1v1xZFJPjbmb5vUsjt7vPu300ibpEFWRG"); // Substitua pela sua chave pública Stripe
 
 const elements = stripe.elements();
 const cardElement = elements.create("card");
