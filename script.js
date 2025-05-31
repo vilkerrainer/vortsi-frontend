@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const data = {
       title: "BOT",
       quantity: 1,
-      unit_price: 199.99,
+      unit_price: 0.10,
       payer_email: userEmail // envia o email junto
     };
 
