@@ -210,15 +210,10 @@ logoutBtn.addEventListener('click', async () => {
       }
     });
 
-    if (response.ok) {
-      // Limpar dados do usuário
-      localStorage.removeItem('userData');
-      showLoggedOutState();
-      showMessage('Você saiu da sua conta.', true);
-    } else {
-      const data = await response.json();
-      showMessage(data.error || 'Erro ao sair', false);
-    }
+    // Limpar dados do usuário independente da resposta do servidor
+    localStorage.removeItem('userData');
+    showLoggedOutState();
+    showMessage('Você saiu da sua conta.', true);
   } catch (error) {
     showMessage('Erro na conexão com o servidor', false);
   }
