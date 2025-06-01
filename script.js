@@ -14,29 +14,21 @@ const userName = document.getElementById('user-name');
 const userEmail = document.getElementById('user-email');
 
 // Verificar estado de login ao carregar
-async function checkLoginStatus() {
-  try {
-    const response = await fetch(`${backendUrl}/check-session`, {
-      method: 'GET',
-      credentials: 'include'
-    });
-
-    if (response.status === 401) {
-      // Não autenticado
-      showLoggedOutState();
-      return;
+function checkLoginStatus() {
+  const userData = localStorage.getItem('userData');
+  
+  if (userData) {
+    try {
+      const parsedData = JSON.parse(userData);
+      showLoggedInState(parsedData);
+      return true;
+    } catch (e) {
+      console.error('Erro ao analisar dados do usuário:', e);
     }
-
-    if (!response.ok) {
-      throw new Error(`Erro HTTP: ${response.status}`);
-    }
-
-    const userData = await response.json();
-    showLoggedInState(userData);
-  } catch (error) {
-    console.error('Erro ao verificar sessão:', error);
-    showLoggedOutState();
   }
+  
+  showLoggedOutState();
+  return false;
 }
 
 // Mostrar estado logado
@@ -145,17 +137,21 @@ loginBtn.addEventListener('click', async (e) => {
       headers: {
         'Content-Type': 'application/json'
       },
-      credentials: 'include',
       body: JSON.stringify({ email, senha })
     });
 
     const data = await response.json();
 
     if (response.ok) {
-      showLoggedInState({
+      // Salvar dados do usuário no localStorage
+      const userData = {
         nome: data.nome,
-        email: data.email
-      });
+        email: data.email,
+        pago: data.pago
+      };
+      localStorage.setItem('userData', JSON.stringify(userData));
+      
+      showLoggedInState(userData);
       showMessage('Login realizado com sucesso! Bem-vindo!', true);
     } else {
       showMessage(data.error || 'Erro no login. Verifique suas credenciais.', false);
@@ -209,10 +205,14 @@ logoutBtn.addEventListener('click', async () => {
   try {
     const response = await fetch(`${backendUrl}/logout`, {
       method: 'POST',
-      credentials: 'include'
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
 
     if (response.ok) {
+      // Limpar dados do usuário
+      localStorage.removeItem('userData');
       showLoggedOutState();
       showMessage('Você saiu da sua conta.', true);
     } else {
