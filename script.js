@@ -1,4 +1,4 @@
-const backendUrl = "https://vortsi-backend.onrender.com";
+// const backendUrl = "https://vortsi-backend.onrender.com";
 
 // Elementos DOM
 const loginForm = document.getElementById('login-form');
@@ -132,7 +132,7 @@ loginBtn.addEventListener('click', async (e) => {
   showMessage('Autenticando...', true);
 
   try {
-    const response = await fetch(`${backendUrl}/login`, {
+    const response = await fetch(`${"https://vortsi-backend.onrender.com"}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -174,7 +174,7 @@ registerBtn.addEventListener('click', async (e) => {
   showMessage('Criando conta...', true);
 
   try {
-    const response = await fetch(`${backendUrl}/register`, {
+    const response = await fetch(`${"https://vortsi-backend.onrender.com"}/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -203,7 +203,7 @@ registerBtn.addEventListener('click', async (e) => {
 // Logout
 logoutBtn.addEventListener('click', async () => {
   try {
-    const response = await fetch(`${backendUrl}/logout`, {
+    const response = await fetch(`${"https://vortsi-backend.onrender.com"}/logout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
