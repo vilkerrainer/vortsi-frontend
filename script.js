@@ -18,20 +18,25 @@ async function checkLoginStatus() {
   try {
     const response = await fetch(`${backendUrl}/check-session`, {
       method: 'GET',
-      credentials: 'include' // Importante para enviar cookies
+      credentials: 'include'
     });
 
-    if (response.ok) {
-      const userData = await response.json();
-      showLoggedInState(userData);
-      return true;
+    if (response.status === 401) {
+      // Não autenticado
+      showLoggedOutState();
+      return;
     }
+
+    if (!response.ok) {
+      throw new Error(`Erro HTTP: ${response.status}`);
+    }
+
+    const userData = await response.json();
+    showLoggedInState(userData);
   } catch (error) {
     console.error('Erro ao verificar sessão:', error);
+    showLoggedOutState();
   }
-  
-  showLoggedOutState();
-  return false;
 }
 
 // Mostrar estado logado
@@ -52,6 +57,10 @@ function showLoggedOutState() {
   logoutBtn.classList.add('hidden');
   userInfo.classList.add('hidden');
   clearMessage();
+  
+  // Limpar campos de login
+  document.getElementById('email').value = '';
+  document.getElementById('senha').value = '';
 }
 
 // Limpar mensagens
@@ -136,14 +145,13 @@ loginBtn.addEventListener('click', async (e) => {
       headers: {
         'Content-Type': 'application/json'
       },
-      credentials: 'include', // Crucial para sessões com cookies
+      credentials: 'include',
       body: JSON.stringify({ email, senha })
     });
 
     const data = await response.json();
 
     if (response.ok) {
-      // Login bem-sucedido
       showLoggedInState({
         nome: data.nome,
         email: data.email
