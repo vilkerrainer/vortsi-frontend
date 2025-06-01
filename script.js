@@ -14,17 +14,23 @@ const userName = document.getElementById('user-name');
 const userEmail = document.getElementById('user-email');
 
 // Verificar estado de login ao carregar
-function checkLoginStatus() {
-  const userData = localStorage.getItem('userData');
-  
-  if (userData) {
-    try {
-      const parsedData = JSON.parse(userData);
-      showLoggedInState(parsedData);
+async function checkLoginStatus() {
+  try {
+    const response = await fetch(`${backendUrl}/check-session`, {
+      method: 'GET',
+      credentials: 'include'
+    });
+
+    if (response.ok) {
+      const userData = await response.json();
+      showLoggedInState(userData);
       return true;
-    } catch (e) {
-      console.error('Erro ao analisar dados do usuário:', e);
+    } else if (response.status === 401) {
+      // Não autenticado
+      showLoggedOutState();
     }
+  } catch (error) {
+    console.error('Erro ao verificar sessão:', error);
   }
   
   showLoggedOutState();
@@ -137,22 +143,38 @@ loginBtn.addEventListener('click', async (e) => {
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: 'include',
       body: JSON.stringify({ email, senha })
     });
+
+    // Se a resposta for um redirecionamento, segue manualmente
+    if (response.redirected) {
+      window.location.href = response.url;
+      return;
+    }
 
     const data = await response.json();
 
     if (response.ok) {
-      // Salvar dados do usuário no localStorage
-      const userData = {
-        nome: data.nome,
-        email: data.email,
-        pago: data.pago
-      };
-      localStorage.setItem('userData', JSON.stringify(userData));
-      
-      showLoggedInState(userData);
-      showMessage('Login realizado com sucesso! Bem-vindo!', true);
+      // Verificar sessão após login
+      setTimeout(async () => {
+        try {
+          const sessionResponse = await fetch(`${backendUrl}/check-session`, {
+            method: 'GET',
+            credentials: 'include'
+          });
+          
+          if (sessionResponse.ok) {
+            const userData = await sessionResponse.json();
+            showLoggedInState(userData);
+            showMessage('Login realizado com sucesso! Bem-vindo!', true);
+          } else {
+            showMessage('Sessão não estabelecida. Tente novamente.', false);
+          }
+        } catch (error) {
+          showMessage('Erro ao verificar sessão: ' + error.message, false);
+        }
+      }, 500);
     } else {
       showMessage(data.error || 'Erro no login. Verifique suas credenciais.', false);
     }
@@ -205,15 +227,16 @@ logoutBtn.addEventListener('click', async () => {
   try {
     const response = await fetch(`${backendUrl}/logout`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      credentials: 'include'
     });
 
-    // Limpar dados do usuário independente da resposta do servidor
-    localStorage.removeItem('userData');
-    showLoggedOutState();
-    showMessage('Você saiu da sua conta.', true);
+    if (response.ok) {
+      showLoggedOutState();
+      showMessage('Você saiu da sua conta.', true);
+    } else {
+      const data = await response.json();
+      showMessage(data.error || 'Erro ao sair', false);
+    }
   } catch (error) {
     showMessage('Erro na conexão com o servidor', false);
   }
