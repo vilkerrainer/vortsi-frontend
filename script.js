@@ -18,7 +18,11 @@ async function checkLoginStatus() {
   try {
     const response = await fetch(`${backendUrl}/check-session`, {
       method: 'GET',
-      credentials: 'include'
+      credentials: 'include',
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      }
     });
 
     if (response.ok) {
@@ -28,13 +32,26 @@ async function checkLoginStatus() {
     } else if (response.status === 401) {
       // Não autenticado
       showLoggedOutState();
+      return false;
+    } else {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
   } catch (error) {
     console.error('Erro ao verificar sessão:', error);
+    // Fallback para verificação via localStorage
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      try {
+        const parsedData = JSON.parse(userData);
+        showLoggedInState(parsedData);
+        return true;
+      } catch (e) {
+        console.error('Erro ao analisar dados do usuário:', e);
+      }
+    }
+    showLoggedOutState();
+    return false;
   }
-  
-  showLoggedOutState();
-  return false;
 }
 
 // Mostrar estado logado
@@ -46,6 +63,9 @@ function showLoggedInState(userData) {
 
   userName.textContent = userData.nome;
   userEmail.textContent = userData.email;
+  
+  // Armazenar dados no localStorage como fallback
+  localStorage.setItem('userData', JSON.stringify(userData));
 }
 
 // Mostrar estado não logado
@@ -59,6 +79,9 @@ function showLoggedOutState() {
   // Limpar campos de login
   document.getElementById('email').value = '';
   document.getElementById('senha').value = '';
+  
+  // Remover dados do localStorage
+  localStorage.removeItem('userData');
 }
 
 // Limpar mensagens
@@ -71,6 +94,13 @@ function clearMessage() {
 function showMessage(text, isSuccess) {
   messageDiv.textContent = text;
   messageDiv.className = isSuccess ? 'success' : 'error';
+  
+  // Auto-ocultar mensagens após 5 segundos
+  if (text) {
+    setTimeout(() => {
+      clearMessage();
+    }, 5000);
+  }
 }
 
 // Validação de formulário
@@ -147,34 +177,19 @@ loginBtn.addEventListener('click', async (e) => {
       body: JSON.stringify({ email, senha })
     });
 
-    // Se a resposta for um redirecionamento, segue manualmente
-    if (response.redirected) {
-      window.location.href = response.url;
-      return;
-    }
-
     const data = await response.json();
 
     if (response.ok) {
-      // Verificar sessão após login
-      setTimeout(async () => {
-        try {
-          const sessionResponse = await fetch(`${backendUrl}/check-session`, {
-            method: 'GET',
-            credentials: 'include'
-          });
-          
-          if (sessionResponse.ok) {
-            const userData = await sessionResponse.json();
-            showLoggedInState(userData);
-            showMessage('Login realizado com sucesso! Bem-vindo!', true);
-          } else {
-            showMessage('Sessão não estabelecida. Tente novamente.', false);
-          }
-        } catch (error) {
-          showMessage('Erro ao verificar sessão: ' + error.message, false);
-        }
-      }, 500);
+      // Armazenar dados do usuário localmente
+      const userData = {
+        nome: data.nome,
+        email: data.email,
+        pago: data.pago
+      };
+      
+      // Mostrar estado logado
+      showLoggedInState(userData);
+      showMessage('Login realizado com sucesso! Bem-vindo!', true);
     } else {
       showMessage(data.error || 'Erro no login. Verifique suas credenciais.', false);
     }
@@ -256,4 +271,14 @@ toggleToLogin.addEventListener('click', () => {
 });
 
 // Inicialização
-checkLoginStatus();
+document.addEventListener('DOMContentLoaded', () => {
+  checkLoginStatus();
+  
+  // Preencher campos de demonstração
+  document.getElementById('email').value = 'usuario@exemplo.com';
+  document.getElementById('senha').value = 'senha123';
+  document.getElementById('nome').value = 'Carlos Silva';
+  document.getElementById('reg-email').value = 'novo@usuario.com';
+  document.getElementById('reg-senha').value = 'senha123';
+  document.getElementById('conf-senha').value = 'senha123';
+});
