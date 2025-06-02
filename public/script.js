@@ -1,4 +1,4 @@
-const backendUrl = "https://vortsi-bakcend.vercel.app"; // URL correta do backend
+const backendUrl = "https://vortsi-bakcend.vercel.app";
 
 // Elementos DOM
 const loginForm = document.getElementById('login-form');
@@ -12,8 +12,11 @@ const messageDiv = document.getElementById('message');
 const userInfo = document.getElementById('user-info');
 const userName = document.getElementById('user-name');
 const userEmail = document.getElementById('user-email');
+const authButtons = document.getElementById('auth-buttons');
+const loggedUser = document.getElementById('logged-user');
+const userDisplayName = document.getElementById('user-display-name');
 
-// Verificar estado de login ao carregar
+// Verificar estado de login
 async function checkLoginStatus() {
   try {
     const response = await fetch(`${backendUrl}/check-session`, {
@@ -42,31 +45,26 @@ async function checkLoginStatus() {
   }
 }
 
-// Mostrar estado logado
+// Estado logado
 function showLoggedInState(userData) {
-  if (loginForm) loginForm.classList.add('hidden');
-  if (registerForm) registerForm.classList.add('hidden');
-  if (logoutBtn) logoutBtn.classList.remove('hidden');
+  if (authButtons) authButtons.classList.add('hidden');
+  if (loggedUser) loggedUser.classList.remove('hidden');
   if (userInfo) userInfo.classList.remove('hidden');
-
+  
   if (userName) userName.textContent = userData.nome;
   if (userEmail) userEmail.textContent = userData.email;
+  if (userDisplayName) userDisplayName.textContent = userData.nome;
+  
+  showMessage(`Bem-vindo, ${userData.nome}!`, true);
 }
 
-// Mostrar estado não logado
+// Estado não logado
 function showLoggedOutState() {
-  if (loginForm) loginForm.classList.remove('hidden');
-  if (registerForm) registerForm.classList.add('hidden');
-  if (logoutBtn) logoutBtn.classList.add('hidden');
+  if (authButtons) authButtons.classList.remove('hidden');
+  if (loggedUser) loggedUser.classList.add('hidden');
   if (userInfo) userInfo.classList.add('hidden');
   
   clearMessage();
-  
-  // Limpar campos de login
-  const emailInput = document.getElementById('email');
-  const senhaInput = document.getElementById('senha');
-  if (emailInput) emailInput.value = '';
-  if (senhaInput) senhaInput.value = '';
 }
 
 // Limpar mensagens
@@ -83,16 +81,18 @@ function showMessage(text, isSuccess) {
     messageDiv.textContent = text;
     messageDiv.className = isSuccess ? 'success' : 'error';
     
-    // Auto-ocultar mensagens após 5 segundos
-    if (text) {
-      setTimeout(() => {
-        clearMessage();
-      }, 5000);
-    }
+    setTimeout(() => {
+      clearMessage();
+    }, 5000);
   }
 }
 
-// Validação de formulário
+// Validações (mantidas do seu código original)
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+
 function validateLoginForm() {
   const email = document.getElementById('email')?.value;
   const senha = document.getElementById('senha')?.value;
@@ -139,17 +139,10 @@ function validateRegisterForm() {
   return true;
 }
 
-// Validação de email
-function validateEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
-}
-
-// Login
+// Event Listeners
 if (loginBtn) {
   loginBtn.addEventListener('click', async (e) => {
     e.preventDefault();
-
     if (!validateLoginForm()) return;
 
     const email = document.getElementById('email').value;
@@ -171,8 +164,10 @@ if (loginBtn) {
       const data = await response.json();
 
       if (response.ok) {
-        showLoggedInState(data);
-        showMessage('Login realizado com sucesso! Bem-vindo!', true);
+        showMessage('Login realizado com sucesso! Redirecionando...', true);
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1500);
       } else {
         showMessage(data.error || 'Erro no login. Verifique suas credenciais.', false);
       }
@@ -182,11 +177,9 @@ if (loginBtn) {
   });
 }
 
-// Cadastro
 if (registerBtn) {
   registerBtn.addEventListener('click', async (e) => {
     e.preventDefault();
-
     if (!validateRegisterForm()) return;
 
     const nome = document.getElementById('nome').value;
@@ -209,7 +202,6 @@ if (registerBtn) {
 
       if (response.ok) {
         showMessage('Conta criada com sucesso! Faça login.', true);
-        // Limpar o formulário de registro
         document.getElementById('nome').value = '';
         document.getElementById('reg-email').value = '';
         document.getElementById('reg-senha').value = '';
@@ -224,7 +216,6 @@ if (registerBtn) {
   });
 }
 
-// Logout
 if (logoutBtn) {
   logoutBtn.addEventListener('click', async () => {
     try {
@@ -250,7 +241,6 @@ if (logoutBtn) {
   });
 }
 
-// Eventos de alternância
 if (toggleToRegister) {
   toggleToRegister.addEventListener('click', () => {
     if (loginForm) loginForm.classList.add('hidden');

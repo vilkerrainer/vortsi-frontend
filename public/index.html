@@ -3,69 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login Moderno</title>
+  <title>Minha Conta - Vortsi</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Controles de autenticação (superior direito) -->
+  <div id="auth-controls">
+    <!-- Não logado - mostra estes -->
+    <div id="auth-buttons" class="auth-buttons">
+      <a href="login.html" class="btn auth-btn">Login</a>
+      <a href="registro.html" class="btn auth-btn register">Registrar</a>
+    </div>
+    
+    <!-- Logado - mostra estes -->
+    <div id="logged-user" class="logged-user hidden">
+      <span id="user-display-name">Usuário</span>
+      <button id="logout-btn" class="btn logout"><i class="fas fa-sign-out-alt"></i> Sair</button>
+    </div>
+  </div>
+
+  <!-- Conteúdo principal -->
   <div class="container">
     <div class="app-header">
-      <h1>Login Moderno</h1>
-      <p>Entre na sua conta para continuar</p>
+      <h1>Minha Conta</h1>
+      <p>Bem-vindo à sua área pessoal</p>
     </div>
     
     <div id="user-info" class="user-info hidden">
-      <h3>Bem-vindo, <span id="user-name">Usuário</span>!</h3>
+      <h3>Olá, <span id="user-name">Usuário</span>!</h3>
       <p>Você está logado com: <span id="user-email">email@exemplo.com</span></p>
     </div>
-    
-    <div id="login-form" class="form-container">
-      <div class="input-group">
-        <i class="fas fa-envelope"></i>
-        <input type="email" id="email" placeholder="Email" required />
-      </div>
-      
-      <div class="input-group">
-        <i class="fas fa-lock"></i>
-        <input type="password" id="senha" placeholder="Senha" required />
-      </div>
-      
-      <button id="login-btn" class="btn">Entrar</button>
-      
-      <div class="auth-toggle">
-        Não tem uma conta? <a id="toggle-to-register">Cadastre-se</a>
-      </div>
-    </div>
-    
-    <div id="register-form" class="form-container hidden">
-      <div class="input-group">
-        <i class="fas fa-user"></i>
-        <input type="text" id="nome" placeholder="Nome Completo" required />
-      </div>
-      
-      <div class="input-group">
-        <i class="fas fa-envelope"></i>
-        <input type="email" id="reg-email" placeholder="Email" required />
-      </div>
-      
-      <div class="input-group">
-        <i class="fas fa-lock"></i>
-        <input type="password" id="reg-senha" placeholder="Senha" required />
-      </div>
-      
-      <div class="input-group">
-        <i class="fas fa-lock"></i>
-        <input type="password" id="conf-senha" placeholder="Confirmar Senha" required />
-      </div>
-      
-      <button id="register-btn" class="btn">Criar Conta</button>
-      
-      <div class="auth-toggle">
-        Já tem uma conta? <a id="toggle-to-login">Faça login</a>
-      </div>
-    </div>
-    
-    <button id="logout-btn" class="btn logout hidden">Sair</button>
     
     <div id="message"></div>
   </div>
