@@ -1,4 +1,4 @@
-const backendUrl = "vortsi-bakcend.vercel.app";
+const backendUrl = "https://vortsi-bakcend.vercel.app";
 
 // Elementos DOM
 const loginForm = document.getElementById('login-form');
