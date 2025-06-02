@@ -20,8 +20,8 @@ async function checkLoginStatus() {
       method: 'GET',
       credentials: 'include',
       headers: {
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
       }
     });
 
@@ -30,7 +30,6 @@ async function checkLoginStatus() {
       showLoggedInState(userData);
       return true;
     } else if (response.status === 401) {
-      // Não autenticado
       showLoggedOutState();
       return false;
     } else {
@@ -38,17 +37,6 @@ async function checkLoginStatus() {
     }
   } catch (error) {
     console.error('Erro ao verificar sessão:', error);
-    // Fallback para verificação via localStorage
-    const userData = localStorage.getItem('userData');
-    if (userData) {
-      try {
-        const parsedData = JSON.parse(userData);
-        showLoggedInState(parsedData);
-        return true;
-      } catch (e) {
-        console.error('Erro ao analisar dados do usuário:', e);
-      }
-    }
     showLoggedOutState();
     return false;
   }
@@ -56,57 +44,58 @@ async function checkLoginStatus() {
 
 // Mostrar estado logado
 function showLoggedInState(userData) {
-  loginForm.classList.add('hidden');
-  registerForm.classList.add('hidden');
-  logoutBtn.classList.remove('hidden');
-  userInfo.classList.remove('hidden');
+  if (loginForm) loginForm.classList.add('hidden');
+  if (registerForm) registerForm.classList.add('hidden');
+  if (logoutBtn) logoutBtn.classList.remove('hidden');
+  if (userInfo) userInfo.classList.remove('hidden');
 
-  userName.textContent = userData.nome;
-  userEmail.textContent = userData.email;
-  
-  // Armazenar dados no localStorage como fallback
-  localStorage.setItem('userData', JSON.stringify(userData));
+  if (userName) userName.textContent = userData.nome;
+  if (userEmail) userEmail.textContent = userData.email;
 }
 
 // Mostrar estado não logado
 function showLoggedOutState() {
-  loginForm.classList.remove('hidden');
-  registerForm.classList.add('hidden');
-  logoutBtn.classList.add('hidden');
-  userInfo.classList.add('hidden');
+  if (loginForm) loginForm.classList.remove('hidden');
+  if (registerForm) registerForm.classList.add('hidden');
+  if (logoutBtn) logoutBtn.classList.add('hidden');
+  if (userInfo) userInfo.classList.add('hidden');
+  
   clearMessage();
   
   // Limpar campos de login
-  document.getElementById('email').value = '';
-  document.getElementById('senha').value = '';
-  
-  // Remover dados do localStorage
-  localStorage.removeItem('userData');
+  const emailInput = document.getElementById('email');
+  const senhaInput = document.getElementById('senha');
+  if (emailInput) emailInput.value = '';
+  if (senhaInput) senhaInput.value = '';
 }
 
 // Limpar mensagens
 function clearMessage() {
-  messageDiv.textContent = '';
-  messageDiv.className = '';
+  if (messageDiv) {
+    messageDiv.textContent = '';
+    messageDiv.className = '';
+  }
 }
 
 // Mostrar mensagem
 function showMessage(text, isSuccess) {
-  messageDiv.textContent = text;
-  messageDiv.className = isSuccess ? 'success' : 'error';
-  
-  // Auto-ocultar mensagens após 5 segundos
-  if (text) {
-    setTimeout(() => {
-      clearMessage();
-    }, 5000);
+  if (messageDiv) {
+    messageDiv.textContent = text;
+    messageDiv.className = isSuccess ? 'success' : 'error';
+    
+    // Auto-ocultar mensagens após 5 segundos
+    if (text) {
+      setTimeout(() => {
+        clearMessage();
+      }, 5000);
+    }
   }
 }
 
 // Validação de formulário
 function validateLoginForm() {
-  const email = document.getElementById('email').value;
-  const senha = document.getElementById('senha').value;
+  const email = document.getElementById('email')?.value;
+  const senha = document.getElementById('senha')?.value;
 
   if (!email || !senha) {
     showMessage('Por favor, preencha todos os campos.', false);
@@ -122,10 +111,10 @@ function validateLoginForm() {
 }
 
 function validateRegisterForm() {
-  const nome = document.getElementById('nome').value;
-  const email = document.getElementById('reg-email').value;
-  const senha = document.getElementById('reg-senha').value;
-  const confSenha = document.getElementById('conf-senha').value;
+  const nome = document.getElementById('nome')?.value;
+  const email = document.getElementById('reg-email')?.value;
+  const senha = document.getElementById('reg-senha')?.value;
+  const confSenha = document.getElementById('conf-senha')?.value;
 
   if (!nome || !email || !senha || !confSenha) {
     showMessage('Por favor, preencha todos os campos.', false);
@@ -157,128 +146,128 @@ function validateEmail(email) {
 }
 
 // Login
-loginBtn.addEventListener('click', async (e) => {
-  e.preventDefault();
+if (loginBtn) {
+  loginBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
 
-  if (!validateLoginForm()) return;
+    if (!validateLoginForm()) return;
 
-  const email = document.getElementById('email').value;
-  const senha = document.getElementById('senha').value;
+    const email = document.getElementById('email').value;
+    const senha = document.getElementById('senha').value;
 
-  showMessage('Autenticando...', true);
+    showMessage('Autenticando...', true);
 
-  try {
-    const response = await fetch(`${backendUrl}/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      credentials: 'include',
-      body: JSON.stringify({ email, senha })
-    });
+    try {
+      const response = await fetch(`${backendUrl}/login`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ email, senha })
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      // Armazenar dados do usuário localmente
-      const userData = {
-        nome: data.nome,
-        email: data.email,
-        pago: data.pago
-      };
-      
-      // Mostrar estado logado
-      showLoggedInState(userData);
-      showMessage('Login realizado com sucesso! Bem-vindo!', true);
-    } else {
-      showMessage(data.error || 'Erro no login. Verifique suas credenciais.', false);
+      if (response.ok) {
+        showLoggedInState(data);
+        showMessage('Login realizado com sucesso! Bem-vindo!', true);
+      } else {
+        showMessage(data.error || 'Erro no login. Verifique suas credenciais.', false);
+      }
+    } catch (error) {
+      showMessage('Erro na conexão com o servidor. Tente novamente.', false);
     }
-  } catch (error) {
-    showMessage('Erro na conexão com o servidor. Tente novamente.', false);
-  }
-});
+  });
+}
 
 // Cadastro
-registerBtn.addEventListener('click', async (e) => {
-  e.preventDefault();
+if (registerBtn) {
+  registerBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
 
-  if (!validateRegisterForm()) return;
+    if (!validateRegisterForm()) return;
 
-  const nome = document.getElementById('nome').value;
-  const email = document.getElementById('reg-email').value;
-  const senha = document.getElementById('reg-senha').value;
+    const nome = document.getElementById('nome').value;
+    const email = document.getElementById('reg-email').value;
+    const senha = document.getElementById('reg-senha').value;
 
-  showMessage('Criando conta...', true);
+    showMessage('Criando conta...', true);
 
-  try {
-    const response = await fetch(`${backendUrl}/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ nome, email, senha })
-    });
+    try {
+      const response = await fetch(`${backendUrl}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ nome, email, senha })
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      showMessage('Conta criada com sucesso! Faça login.', true);
-      // Limpar o formulário de registro
-      document.getElementById('nome').value = '';
-      document.getElementById('reg-email').value = '';
-      document.getElementById('reg-senha').value = '';
-      document.getElementById('conf-senha').value = '';
-      toggleToLogin.click();
-    } else {
-      showMessage(data.error || 'Erro ao criar conta. Tente novamente.', false);
+      if (response.ok) {
+        showMessage('Conta criada com sucesso! Faça login.', true);
+        // Limpar o formulário de registro
+        document.getElementById('nome').value = '';
+        document.getElementById('reg-email').value = '';
+        document.getElementById('reg-senha').value = '';
+        document.getElementById('conf-senha').value = '';
+        if (toggleToLogin) toggleToLogin.click();
+      } else {
+        showMessage(data.error || 'Erro ao criar conta. Tente novamente.', false);
+      }
+    } catch (error) {
+      showMessage('Erro na conexão com o servidor. Tente novamente.', false);
     }
-  } catch (error) {
-    showMessage('Erro na conexão com o servidor. Tente novamente.', false);
-  }
-});
+  });
+}
 
 // Logout
-logoutBtn.addEventListener('click', async () => {
-  try {
-    const response = await fetch(`${backendUrl}/logout`, {
-      method: 'POST',
-      credentials: 'include'
-    });
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', async () => {
+    try {
+      const response = await fetch(`${backendUrl}/logout`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      });
 
-    if (response.ok) {
-      showLoggedOutState();
-      showMessage('Você saiu da sua conta.', true);
-    } else {
-      const data = await response.json();
-      showMessage(data.error || 'Erro ao sair', false);
+      if (response.ok) {
+        showLoggedOutState();
+        showMessage('Você saiu da sua conta.', true);
+      } else {
+        const data = await response.json();
+        showMessage(data.error || 'Erro ao sair', false);
+      }
+    } catch (error) {
+      showMessage('Erro na conexão com o servidor', false);
     }
-  } catch (error) {
-    showMessage('Erro na conexão com o servidor', false);
-  }
-});
+  });
+}
 
 // Eventos de alternância
-toggleToRegister.addEventListener('click', () => {
-  loginForm.classList.add('hidden');
-  registerForm.classList.remove('hidden');
-  clearMessage();
-});
+if (toggleToRegister) {
+  toggleToRegister.addEventListener('click', () => {
+    if (loginForm) loginForm.classList.add('hidden');
+    if (registerForm) registerForm.classList.remove('hidden');
+    clearMessage();
+  });
+}
 
-toggleToLogin.addEventListener('click', () => {
-  registerForm.classList.add('hidden');
-  loginForm.classList.remove('hidden');
-  clearMessage();
-});
+if (toggleToLogin) {
+  toggleToLogin.addEventListener('click', () => {
+    if (registerForm) registerForm.classList.add('hidden');
+    if (loginForm) loginForm.classList.remove('hidden');
+    clearMessage();
+  });
+}
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
   checkLoginStatus();
-  
-  // Preencher campos de demonstração
-  document.getElementById('email').value = 'usuario@exemplo.com';
-  document.getElementById('senha').value = 'senha123';
-  document.getElementById('nome').value = 'Carlos Silva';
-  document.getElementById('reg-email').value = 'novo@usuario.com';
-  document.getElementById('reg-senha').value = 'senha123';
-  document.getElementById('conf-senha').value = 'senha123';
 });
