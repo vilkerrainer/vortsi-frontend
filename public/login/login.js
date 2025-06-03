@@ -68,7 +68,7 @@ if (loginForm) {
         localStorage.setItem('userData', JSON.stringify(data.user));
         showMessage('Login realizado com sucesso! Redirecionando...', true);
         setTimeout(() => {
-          window.location.href = '/public';
+          window.location.href = '/';
         }, 1500);
       } else {
         showMessage(data.error || 'Erro no login. Verifique suas credenciais.', false);
