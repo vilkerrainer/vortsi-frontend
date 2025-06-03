@@ -414,13 +414,6 @@ body {
   background: linear-gradient(to right, #e55a5a, #e57a7a);
 }
 
-.auth-btn.register {
-  background: linear-gradient(to right, #4facfe, #00f2fe);
-}
-
-.auth-btn.register:hover {
-  background: linear-gradient(to right, #3a9bec, #00d9e6);
-}
 
 /* Mensagens */
 #message {
