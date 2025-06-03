@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Registro - Vortsi</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="registro.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="auth-page">
@@ -17,36 +18,36 @@
   <div class="auth-container">
     <div class="auth-form-header">
       <h1>Criar Conta</h1>
-      <p>Preencha seus dados para se registrar</p>
+      <p>Preencha os dados para se registrar</p>
     </div>
     
-    <div id="register-form" class="form-wrapper">
+    <form id="register-form" class="form-wrapper">
       <div class="input-field">
         <i class="fas fa-user"></i>
-        <input type="text" id="name" placeholder="Nome Completo" required />
+        <input type="text" id="nome" placeholder="Seu nome completo" required />
       </div>
       
       <div class="input-field">
         <i class="fas fa-envelope"></i>
-        <input type="email" id="email" placeholder="Email" required />
+        <input type="email" id="reg-email" placeholder="Seu email" required />
       </div>
       
       <div class="input-field">
         <i class="fas fa-lock"></i>
-        <input type="password" id="password" placeholder="Senha" required />
+        <input type="password" id="reg-senha" placeholder="Crie uma senha" required />
       </div>
       
       <div class="input-field">
         <i class="fas fa-lock"></i>
-        <input type="password" id="confirm-password" placeholder="Confirmar Senha" required />
+        <input type="password" id="conf-senha" placeholder="Confirme sua senha" required />
       </div>
       
-      <button id="register-btn" class="btn">Criar Conta</button>
+      <button type="submit" id="register-btn" class="btn">Registrar</button>
       
       <div class="auth-link">
         Já tem uma conta? <a href="login.html">Faça login</a>
       </div>
-    </div>
+    </form>
     
     <div id="message" class="system-message hidden"></div>
   </div>

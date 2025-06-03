@@ -30,7 +30,6 @@ body::before {
   bottom: 0;
   background: linear-gradient(135deg, #667eea, #764ba2);
   z-index: -1;
-  /* Opcional: animação sutil do gradiente */
   animation: gradientBG 15s ease infinite;
   background-size: 200% 200%;
 }
@@ -45,7 +44,6 @@ body::before {
 /* COMPONENTES REUTILIZÁVEIS */
 /* =========================================== */
 
-/* Botões */
 .btn {
   display: inline-block;
   padding: 12px 24px;
@@ -83,7 +81,6 @@ body::before {
   background: linear-gradient(to right, #e55a5a, #e57a7a);
 }
 
-/* Container principal */
 .main-container {
   background-color: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(8px);
@@ -98,19 +95,19 @@ body::before {
   z-index: 2;
 }
 
-.auth-container {
-  background-color: rgba(255, 255, 255, 0.98);
-  border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 450px;
-  padding: 40px;
-  margin: 20px auto;
-  transition: transform 0.3s ease;
+#message {
+  min-height: 50px;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
-/* Mensagens do sistema */
 .system-message {
+  display: flex;
+  justify-content: center;
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -216,6 +213,14 @@ body::before {
   gap: 15px;
 }
 
+.user-info.hidden {
+  display: none;
+}
+
+.auth-buttons.hidden {
+  display: none;
+}
+
 .user-info span {
   color: white;
   font-weight: 600;
@@ -242,7 +247,6 @@ body::before {
   transform: translateY(0);
 }
 
-/* Seção Hero */
 .hero-section {
   text-align: center;
   position: relative;
@@ -302,7 +306,6 @@ body::before {
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-/* Seções de conteúdo */
 .section-title {
   text-align: center;
   margin-bottom: 30px;
@@ -333,7 +336,6 @@ body::before {
   font-size: 1.3rem;
 }
 
-/* Seção de passos */
 .steps-wrapper {
   margin-top: 40px;
 }
@@ -394,7 +396,6 @@ body::before {
   transform: scale(1.03);
 }
 
-/* Seção de resultados */
 .results-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -431,7 +432,6 @@ body::before {
   font-size: 1.3rem;
 }
 
-/* Seção de preços */
 .pricing-section {
   max-width: 800px;
   margin: 0 auto;
@@ -499,105 +499,6 @@ body::before {
 }
 
 /* =========================================== */
-/* PÁGINAS DE AUTENTICAÇÃO */
-/* =========================================== */
-
-.auth-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
-}
-
-.auth-header {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: transparent;
-  backdrop-filter: none;
-  box-shadow: none;
-  padding: 20px 5%;
-}
-
-.auth-header .auth-buttons {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
-
-.auth-form-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.auth-form-header h1 {
-  color: #764ba2;
-  font-size: 2.5rem;
-  margin-bottom: 15px;
-}
-
-.auth-form-header p {
-  color: #666;
-  font-size: 1.1rem;
-}
-
-.form-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-}
-
-.input-field {
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.input-field i {
-  position: absolute;
-  left: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #667eea;
-  font-size: 1.1rem;
-}
-
-.input-field input {
-  width: 100%;
-  padding: 16px 20px 16px 50px;
-  border: 1px solid #ddd;
-  border-radius: 30px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.input-field input:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-  outline: none;
-}
-
-.auth-link {
-  text-align: center;
-  margin-top: 25px;
-  color: #666;
-  font-size: 1rem;
-}
-
-.auth-link a {
-  color: #667eea;
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.3s ease;
-}
-
-.auth-link a:hover {
-  color: #764ba2;
-  text-decoration: underline;
-}
-
-/* =========================================== */
 /* RESPONSIVIDADE */
 /* =========================================== */
 
@@ -634,15 +535,10 @@ body::before {
   .hero-main-title {
     font-size: 3.5rem;
   }
-  
-  .auth-container {
-    margin-top: 100px;
-  }
 }
 
 @media (max-width: 480px) {
-  .main-container,
-  .auth-container {
+  .main-container {
     padding: 25px 15px;
   }
   
@@ -652,10 +548,6 @@ body::before {
   
   .hero-main-title {
     font-size: 2.8rem;
-  }
-  
-  .auth-form-header h1 {
-    font-size: 2rem;
   }
   
   .input-field input {
@@ -670,5 +562,10 @@ body::before {
   .auth-buttons {
     flex-direction: column;
     gap: 5px;
+  }
+  
+  .user-info {
+    flex-direction: column;
+    gap: 10px;
   }
 }

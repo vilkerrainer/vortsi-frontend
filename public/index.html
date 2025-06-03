@@ -23,15 +23,17 @@
       </ul>
     </nav>
 
-    <!-- Controles de autenticação -->
+    <!-- Controles de autenticação - ATUALIZADO COM IDs -->
     <div class="auth-controls">
-      <div class="auth-buttons">
+      <div id="auth-buttons" class="auth-buttons">
         <a href="login.html" class="btn auth-btn">Login</a>
         <a href="registro.html" class="btn auth-btn register">Registrar</a>
       </div>
-      <div class="user-info hidden">
-        <span class="user-display-name">Usuário</span>
-        <button class="btn btn-danger logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</button>
+      <div id="logged-user" class="user-info hidden">
+        <span id="user-display-name" class="user-display-name">Usuário</span>
+        <button id="logout-btn" class="btn btn-danger logout-btn">
+          <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
       </div>
     </div>
   </header>

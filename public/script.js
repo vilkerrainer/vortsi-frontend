@@ -11,7 +11,7 @@ const authButtons = document.getElementById('auth-buttons');
 const loggedUser = document.getElementById('logged-user');
 const userDisplayName = document.getElementById('user-display-name');
 const navLinks = document.querySelectorAll('.nav-links a');
-const sections = document.querySelectorAll('.main-section'); // Alterado de .section para .main-section
+const sections = document.querySelectorAll('.main-section');
 const buyBtn = document.querySelector('.buy-btn');
 
 // Observador de interseção para animações
@@ -78,9 +78,12 @@ async function checkLoginStatus() {
 
     if (response.ok) {
       const userData = await response.json();
+      // Armazena os dados do usuário no localStorage
+      localStorage.setItem('userData', JSON.stringify(userData));
       showLoggedInState(userData);
       return true;
     } else if (response.status === 401) {
+      localStorage.removeItem('userData');
       showLoggedOutState();
       return false;
     } else {
@@ -95,19 +98,31 @@ async function checkLoginStatus() {
 
 // Estado logado
 function showLoggedInState(userData) {
+  if (!userData) {
+    // Tenta recuperar do localStorage se não foi passado
+    const storedUser = localStorage.getItem('userData');
+    if (storedUser) {
+      userData = JSON.parse(storedUser);
+    } else {
+      showLoggedOutState();
+      return;
+    }
+  }
+
   if (authButtons) authButtons.classList.add('hidden');
-  if (loggedUser) loggedUser.classList.remove('hidden');
-  
-  if (userDisplayName) userDisplayName.textContent = userData.nome;
-  
-  showMessage(`Bem-vindo, ${userData.nome}!`, true);
+  if (loggedUser) {
+    loggedUser.classList.remove('hidden');
+    if (userDisplayName) {
+      userDisplayName.textContent = userData.nome || 'Usuário';
+    }
+  }
+  showMessage(`Bem-vindo, ${userData.nome || 'Usuário'}!`, true);
 }
 
 // Estado não logado
 function showLoggedOutState() {
   if (authButtons) authButtons.classList.remove('hidden');
   if (loggedUser) loggedUser.classList.add('hidden');
-  
   clearMessage();
 }
 
@@ -115,13 +130,10 @@ function showLoggedOutState() {
 function showMessage(text, isSuccess) {
   if (messageDiv) {
     messageDiv.textContent = text;
-    messageDiv.className = isSuccess ? 'success show' : 'error show';
+    messageDiv.className = isSuccess ? 'message-success show' : 'message-error show';
     
     setTimeout(() => {
       messageDiv.classList.remove('show');
-      setTimeout(() => {
-        clearMessage();
-      }, 300);
     }, 5000);
   }
 }
@@ -142,9 +154,9 @@ function validateEmail(email) {
 
 function validateLoginForm() {
   const email = document.getElementById('email')?.value;
-  const senha = document.getElementById('senha')?.value;
+  const password = document.getElementById('password')?.value;
 
-  if (!email || !senha) {
+  if (!email || !password) {
     showMessage('Por favor, preencha todos os campos.', false);
     return false;
   }
@@ -187,13 +199,14 @@ function validateRegisterForm() {
 }
 
 // Event Listeners
-if (loginBtn) {
-  loginBtn.addEventListener('click', async (e) => {
+if (loginForm) {
+  loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!validateLoginForm()) return;
-
+    
     const email = document.getElementById('email').value;
-    const senha = document.getElementById('senha').value;
+    const password = document.getElementById('password').value;
+
+    if (!validateLoginForm()) return;
 
     showMessage('Autenticando...', true);
 
@@ -205,12 +218,14 @@ if (loginBtn) {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify({ email, senha })
+        body: JSON.stringify({ email, senha: password })
       });
 
       const data = await response.json();
 
       if (response.ok) {
+        // Armazena os dados do usuário no localStorage
+        localStorage.setItem('userData', JSON.stringify(data.user));
         showMessage('Login realizado com sucesso! Redirecionando...', true);
         setTimeout(() => {
           window.location.href = 'index.html';
@@ -224,14 +239,16 @@ if (loginBtn) {
   });
 }
 
-if (registerBtn) {
-  registerBtn.addEventListener('click', async (e) => {
+if (registerForm) {
+  registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!validateRegisterForm()) return;
-
+    
     const nome = document.getElementById('nome').value;
     const email = document.getElementById('reg-email').value;
     const senha = document.getElementById('reg-senha').value;
+    const confSenha = document.getElementById('conf-senha').value;
+
+    if (!validateRegisterForm()) return;
 
     showMessage('Criando conta...', true);
 
@@ -249,10 +266,7 @@ if (registerBtn) {
 
       if (response.ok) {
         showMessage('Conta criada com sucesso! Faça login.', true);
-        document.getElementById('nome').value = '';
-        document.getElementById('reg-email').value = '';
-        document.getElementById('reg-senha').value = '';
-        document.getElementById('conf-senha').value = '';
+        registerForm.reset();
       } else {
         showMessage(data.error || 'Erro ao criar conta. Tente novamente.', false);
       }
@@ -275,8 +289,14 @@ if (logoutBtn) {
       });
 
       if (response.ok) {
+        // Remove os dados do usuário do localStorage
+        localStorage.removeItem('userData');
         showLoggedOutState();
         showMessage('Você saiu da sua conta.', true);
+        // Redireciona para a página inicial se não estiver nela
+        if (!window.location.href.includes('index.html')) {
+          window.location.href = 'index.html';
+        }
       } else {
         const data = await response.json();
         showMessage(data.error || 'Erro ao sair', false);
@@ -296,7 +316,14 @@ if (buyBtn) {
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
-  checkLoginStatus();
+  // Verifica o status de login ao carregar a página
+  checkLoginStatus().then(isLoggedIn => {
+    if (isLoggedIn) {
+      // Se estiver logado, mostra os dados do usuário
+      const userData = JSON.parse(localStorage.getItem('userData')) || {};
+      showLoggedInState(userData);
+    }
+  });
   
   // Ativar primeira seção
   if (window.location.hash) {
