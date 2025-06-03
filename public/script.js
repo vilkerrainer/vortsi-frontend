@@ -136,8 +136,8 @@ if (logoutBtn) {
         localStorage.removeItem('userData');
         showLoggedOutState();
         // Redireciona para a página inicial se não estiver nela
-        if (!window.location.href.includes('/public/index.html')) {
-          window.location.href = '/public/index.html';
+        if (!window.location.href.includes('/index.html')) {
+          window.location.href = '/index.html';
         }
       } else {
         const data = await response.json();
