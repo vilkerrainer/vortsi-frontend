@@ -7,36 +7,38 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <div class="auth-buttons" id="auth-buttons">
-    <a href="index.html" class="btn auth-btn">Voltar</a>
-  </div>
+<body class="auth-page">
+  <header class="auth-header">
+    <div class="auth-buttons">
+      <a href="index.html" class="btn btn-secondary">Voltar</a>
+    </div>
+  </header>
   
-  <div class="container">
-    <div class="app-header">
+  <div class="auth-container">
+    <div class="auth-form-header">
       <h1>Login</h1>
       <p>Entre na sua conta para continuar</p>
     </div>
     
-    <div id="login-form" class="form-container">
-      <div class="input-group">
+    <div id="login-form" class="form-wrapper">
+      <div class="input-field">
         <i class="fas fa-envelope"></i>
         <input type="email" id="email" placeholder="Email" required />
       </div>
       
-      <div class="input-group">
+      <div class="input-field">
         <i class="fas fa-lock"></i>
-        <input type="password" id="senha" placeholder="Senha" required />
+        <input type="password" id="password" placeholder="Senha" required />
       </div>
       
       <button id="login-btn" class="btn">Entrar</button>
       
-      <div class="auth-toggle">
+      <div class="auth-link">
         Não tem uma conta? <a href="registro.html">Cadastre-se</a>
       </div>
     </div>
     
-    <div id="message"></div>
+    <div id="message" class="system-message hidden"></div>
   </div>
   <script src="script.js"></script>
 </body>

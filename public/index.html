@@ -15,59 +15,59 @@
         <span>Vortsi</span>
       </div>
       <ul class="nav-links">
-        <li><a href="#home" class="active">Home</a></li>
-        <li><a href="#oque-e">O que é</a></li>
-        <li><a href="#como-usar">Como usar</a></li>
-        <li><a href="#testes">Testes</a></li>
-        <li><a href="#comprar">Comprar</a></li>
+        <li><a href="#hero" class="active">Home</a></li>
+        <li><a href="#about">O que é</a></li>
+        <li><a href="#how-to-use">Como usar</a></li>
+        <li><a href="#tests">Testes</a></li>
+        <li><a href="#pricing">Comprar</a></li>
       </ul>
     </nav>
 
     <!-- Controles de autenticação -->
-    <div id="auth-controls">
-      <div id="auth-buttons" class="auth-buttons">
+    <div class="auth-controls">
+      <div class="auth-buttons">
         <a href="login.html" class="btn auth-btn">Login</a>
         <a href="registro.html" class="btn auth-btn register">Registrar</a>
       </div>
-      <div id="logged-user" class="logged-user hidden">
-        <span id="user-display-name">Usuário</span>
-        <button id="logout-btn" class="btn logout"><i class="fas fa-sign-out-alt"></i> Sair</button>
+      <div class="user-info hidden">
+        <span class="user-display-name">Usuário</span>
+        <button class="btn btn-danger logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</button>
       </div>
     </div>
   </header>
 
   <!-- Conteúdo principal com scroll -->
   <main>
-    <!-- Seção Home -->
-    <section id="home" class="section active">
-      <div class="container">
-        <h1 class="T1">Seja bem vindo(a) ao</h1>
-        <h2 class="T2">Vortsi</h2>
-        <p class="T3">Seu assistente inteligente para compras estratégicas de criptomoedas</p>
-        <a href="#oque-e" class="btn explore-btn">Conheça mais <i class="fas fa-arrow-down"></i></a>
+    <!-- Seção Hero -->
+    <section id="hero" class="main-section hero-section active">
+      <div class="main-container">
+        <h1 class="hero-title">Seja bem vindo(a) ao</h1>
+        <h2 class="hero-main-title">Vortsi</h2>
+        <p class="hero-subtitle">Seu assistente inteligente para compras estratégicas de criptomoedas</p>
+        <a href="#about" class="btn cta-button">Conheça mais <i class="fas fa-arrow-down"></i></a>
       </div>
     </section>
 
     <!-- Seção O que é -->
-    <section id="oque-e" class="section">
-      <div class="container">
-        <h2>🤖 O que é o Vortsi?</h2>
-        <div class="content-box">
-          <div class="feature">
+    <section id="about" class="main-section">
+      <div class="main-container">
+        <h2 class="section-title">🤖 O que é o Vortsi?</h2>
+        <div class="content-block">
+          <div class="feature-card">
             <p>O Vortsi é um <strong>robô ajudante</strong> que fica de olho nos preços de criptomoedas e <strong>compra automaticamente</strong> quando percebe que o preço está "baixo".</p>
           </div>
           
-          <div class="feature">
+          <div class="feature-card">
             <h3>🔍 Como ele sabe que o preço está baixo?</h3>
             <p>Ele usa um indicador inteligente chamado <strong>RSI (Índice de Força Relativa)</strong> que varia de 0 a 100. Quando está abaixo de 30, significa que o preço pode estar em uma boa oportunidade de compra.</p>
           </div>
           
-          <div class="feature">
+          <div class="feature-card">
             <h3>🛒 O que ele faz?</h3>
             <p>Quando o RSI indica que a moeda está "barata", o Vortsi <strong>compra automaticamente</strong> para você, sem precisar ficar monitorando o mercado.</p>
           </div>
           
-          <div class="feature">
+          <div class="feature-card">
             <h3>💡 Por que isso é bom?</h3>
             <p>Você aproveita as quedas de preço sem estresse, com um <strong>preço médio melhor</strong>, enquanto o robô trabalha 24/7 por você.</p>
           </div>
@@ -76,11 +76,11 @@
     </section>
 
     <!-- Seção Como usar -->
-    <section id="como-usar" class="section">
-      <div class="container">
-        <h2>⚙️ Como configurar e usar</h2>
-        <div class="steps-container">
-          <div class="step">
+    <section id="how-to-use" class="main-section">
+      <div class="main-container">
+        <h2 class="section-title">⚙️ Como configurar e usar</h2>
+        <div class="steps-wrapper">
+          <div class="step-item">
             <div class="step-number">1</div>
             <div class="step-content">
               <h3>Crie sua conta</h3>
@@ -91,7 +91,7 @@
             </div>
           </div>
           
-          <div class="step">
+          <div class="step-item">
             <div class="step-number">2</div>
             <div class="step-content">
               <h3>Conecte sua exchange</h3>
@@ -102,7 +102,7 @@
             </div>
           </div>
           
-          <div class="step">
+          <div class="step-item">
             <div class="step-number">3</div>
             <div class="step-content">
               <h3>Configure suas estratégias</h3>
@@ -117,27 +117,27 @@
     </section>
 
     <!-- Seção Testes -->
-    <section id="testes" class="section">
-      <div class="container">
-        <h2>📊 Resultados dos Testes (30 dias)</h2>
-        <div class="test-results">
+    <section id="tests" class="main-section">
+      <div class="main-container">
+        <h2 class="section-title">📊 Resultados dos Testes (30 dias)</h2>
+        <div class="results-grid">
           <div class="result-card">
-            <h3>BTC/USDT</h3>
-            <p class="profit">+8.3% de lucro</p>
+            <h3 class="result-title">BTC/USDT</h3>
+            <p class="profit-text">+8.3% de lucro</p>
             <p>12 operações realizadas</p>
             <p>Preço médio: $28,450</p>
           </div>
           
           <div class="result-card">
-            <h3>ETH/USDT</h3>
-            <p class="profit">+5.7% de lucro</p>
+            <h3 class="result-title">ETH/USDT</h3>
+            <p class="profit-text">+5.7% de lucro</p>
             <p>15 operações realizadas</p>
             <p>Preço médio: $1,820</p>
           </div>
           
-          <div class="result-card highlight">
-            <h3>Melhor Operação</h3>
-            <p class="profit">+3.2% em 6 horas</p>
+          <div class="result-card result-highlight">
+            <h3 class="result-title">Melhor Operação</h3>
+            <p class="profit-text">+3.2% em 6 horas</p>
             <p>Compra: $26,850 | Venda: $27,710</p>
             <p>RSI na compra: 28.5</p>
           </div>
@@ -146,23 +146,23 @@
     </section>
 
     <!-- Seção Comprar -->
-    <section id="comprar" class="section">
-      <div class="container">
-        <h2>💳 Adquira o Vortsi</h2>
-        <div class="pricing-box">
+    <section id="pricing" class="main-section">
+      <div class="main-container">
+        <h2 class="section-title">💳 Adquira o Vortsi</h2>
+        <div class="pricing-section">
           <div class="pricing-card">
             <h3>Acesso Vitalício</h3>
-            <p class="price">R$ 497,00</p>
-            <ul class="features">
+            <p class="price-tag">R$ 497,00</p>
+            <ul class="features-list">
               <li><i class="fas fa-check"></i> Licença permanente</li>
               <li><i class="fas fa-check"></i> Atualizações por 1 ano</li>
               <li><i class="fas fa-check"></i> Suporte prioritário</li>
               <li><i class="fas fa-check"></i> Configuração remota</li>
             </ul>
-            <button class="btn buy-btn">Comprar Agora</button>
+            <button class="btn purchase-button">Comprar Agora</button>
           </div>
           
-          <div class="guarantee">
+          <div class="guarantee-badge">
             <i class="fas fa-shield-alt"></i>
             <p>Garantia de 7 dias ou seu dinheiro de volta</p>
           </div>
@@ -171,7 +171,7 @@
     </section>
   </main>
 
-  <div id="message"></div>
+  <div id="message" class="system-message hidden"></div>
   <script src="script.js"></script>
 </body>
 </html>

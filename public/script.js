@@ -11,7 +11,7 @@ const authButtons = document.getElementById('auth-buttons');
 const loggedUser = document.getElementById('logged-user');
 const userDisplayName = document.getElementById('user-display-name');
 const navLinks = document.querySelectorAll('.nav-links a');
-const sections = document.querySelectorAll('.section');
+const sections = document.querySelectorAll('.main-section'); // Alterado de .section para .main-section
 const buyBtn = document.querySelector('.buy-btn');
 
 // Observador de interseção para animações
@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   } else {
-    sections[0].classList.add('active');
-    navLinks[0].classList.add('active');
+    sections[0]?.classList.add('active');
+    navLinks[0]?.classList.add('active');
   }
 });
