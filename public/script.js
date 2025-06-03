@@ -6,15 +6,63 @@ const registerForm = document.getElementById('register-form');
 const loginBtn = document.getElementById('login-btn');
 const registerBtn = document.getElementById('register-btn');
 const logoutBtn = document.getElementById('logout-btn');
-const toggleToRegister = document.getElementById('toggle-to-register');
-const toggleToLogin = document.getElementById('toggle-to-login');
 const messageDiv = document.getElementById('message');
-const userInfo = document.getElementById('user-info');
-const userName = document.getElementById('user-name');
-const userEmail = document.getElementById('user-email');
 const authButtons = document.getElementById('auth-buttons');
 const loggedUser = document.getElementById('logged-user');
 const userDisplayName = document.getElementById('user-display-name');
+const navLinks = document.querySelectorAll('.nav-links a');
+const sections = document.querySelectorAll('.section');
+const buyBtn = document.querySelector('.buy-btn');
+
+// Observador de interseção para animações
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: "0px 0px -100px 0px"
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('active');
+      
+      // Atualiza o menu ativo
+      const id = entry.target.getAttribute('id');
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${id}`) {
+          link.classList.add('active');
+        }
+      });
+    }
+  });
+}, observerOptions);
+
+// Observar todas as seções
+sections.forEach(section => {
+  observer.observe(section);
+});
+
+// Navegação suave para links do menu
+navLinks.forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    const targetId = this.getAttribute('href');
+    const targetSection = document.querySelector(targetId);
+    const headerHeight = document.querySelector('.main-header').offsetHeight;
+    const targetPosition = targetSection.offsetTop - headerHeight;
+
+    // Adiciona classe ativa
+    navLinks.forEach(navLink => navLink.classList.remove('active'));
+    this.classList.add('active');
+
+    // Scroll suave
+    window.scrollTo({
+      top: targetPosition,
+      behavior: 'smooth'
+    });
+  });
+});
 
 // Verificar estado de login
 async function checkLoginStatus() {
@@ -49,10 +97,7 @@ async function checkLoginStatus() {
 function showLoggedInState(userData) {
   if (authButtons) authButtons.classList.add('hidden');
   if (loggedUser) loggedUser.classList.remove('hidden');
-  if (userInfo) userInfo.classList.remove('hidden');
   
-  if (userName) userName.textContent = userData.nome;
-  if (userEmail) userEmail.textContent = userData.email;
   if (userDisplayName) userDisplayName.textContent = userData.nome;
   
   showMessage(`Bem-vindo, ${userData.nome}!`, true);
@@ -62,9 +107,23 @@ function showLoggedInState(userData) {
 function showLoggedOutState() {
   if (authButtons) authButtons.classList.remove('hidden');
   if (loggedUser) loggedUser.classList.add('hidden');
-  if (userInfo) userInfo.classList.add('hidden');
   
   clearMessage();
+}
+
+// Mostrar mensagem
+function showMessage(text, isSuccess) {
+  if (messageDiv) {
+    messageDiv.textContent = text;
+    messageDiv.className = isSuccess ? 'success show' : 'error show';
+    
+    setTimeout(() => {
+      messageDiv.classList.remove('show');
+      setTimeout(() => {
+        clearMessage();
+      }, 300);
+    }, 5000);
+  }
 }
 
 // Limpar mensagens
@@ -75,19 +134,7 @@ function clearMessage() {
   }
 }
 
-// Mostrar mensagem
-function showMessage(text, isSuccess) {
-  if (messageDiv) {
-    messageDiv.textContent = text;
-    messageDiv.className = isSuccess ? 'success' : 'error';
-    
-    setTimeout(() => {
-      clearMessage();
-    }, 5000);
-  }
-}
-
-// Validações (mantidas do seu código original)
+// Validações
 function validateEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(email);
@@ -206,7 +253,6 @@ if (registerBtn) {
         document.getElementById('reg-email').value = '';
         document.getElementById('reg-senha').value = '';
         document.getElementById('conf-senha').value = '';
-        if (toggleToLogin) toggleToLogin.click();
       } else {
         showMessage(data.error || 'Erro ao criar conta. Tente novamente.', false);
       }
@@ -241,23 +287,31 @@ if (logoutBtn) {
   });
 }
 
-if (toggleToRegister) {
-  toggleToRegister.addEventListener('click', () => {
-    if (loginForm) loginForm.classList.add('hidden');
-    if (registerForm) registerForm.classList.remove('hidden');
-    clearMessage();
-  });
-}
-
-if (toggleToLogin) {
-  toggleToLogin.addEventListener('click', () => {
-    if (registerForm) registerForm.classList.add('hidden');
-    if (loginForm) loginForm.classList.remove('hidden');
-    clearMessage();
+if (buyBtn) {
+  buyBtn.addEventListener('click', () => {
+    showMessage('Redirecionando para página de pagamento...', true);
+    // Adicione aqui a lógica de redirecionamento para o pagamento
   });
 }
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
   checkLoginStatus();
+  
+  // Ativar primeira seção
+  if (window.location.hash) {
+    const target = document.querySelector(window.location.hash);
+    if (target) {
+      target.classList.add('active');
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === window.location.hash) {
+          link.classList.add('active');
+        }
+      });
+    }
+  } else {
+    sections[0].classList.add('active');
+    navLinks[0].classList.add('active');
+  }
 });
