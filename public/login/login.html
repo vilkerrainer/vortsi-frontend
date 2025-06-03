@@ -5,19 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login - Vortsi</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="login.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/public/login/login.css">
+  <link rel="stylesheet" href="/public/style.css">
 </head>
 <body class="auth-page">
   <header class="auth-header">
     <div class="auth-buttons">
-      <a href="index.html" class="btn btn-secondary">Voltar</a>
+      <a href="/public/index.html" class="btn btn-secondary">Voltar</a>
     </div>
   </header>
   
   <div class="auth-container">
     <div class="auth-form-header">
-      <h1>Login</h1>
+      <h1>Login</h1>  
       <p>Entre na sua conta para continuar</p>
     </div>
     
@@ -35,12 +35,12 @@
       <button type="submit" id="login-btn" class="btn">Entrar</button>
       
       <div class="auth-link">
-        Não tem uma conta? <a href="registro.html">Cadastre-se</a>
+        Não tem uma conta? <a href="/public/registro/registro.html">Cadastre-se</a>
       </div>
     </form>
     
     <div id="message" class="system-message hidden"></div>
   </div>
-  <script src="script.js"></script>
+  <script src="/public/login/login.js"></script>
 </body>
 </html>
