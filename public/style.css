@@ -397,7 +397,8 @@ body::before {
 }
 
 .results-grid {
-  display: grid;
+  display: flex;
+  justify-content: center;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 25px;
   margin-top: 40px;
@@ -406,7 +407,7 @@ body::before {
 .result-card {
   background: white;
   border-radius: 10px;
-  padding: 25px;
+  padding: 95px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -421,8 +422,10 @@ body::before {
 }
 
 .result-title {
+  display: flex;
+  justify-content: center;
   color: #667eea;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   font-size: 1.3rem;
 }
 
@@ -430,6 +433,15 @@ body::before {
   color: #28a745;
   font-weight: bold;
   font-size: 1.3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.profit-operations,
+.profit-dates{
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
 }
 
 .pricing-section {
@@ -488,7 +500,7 @@ body::before {
   align-items: center;
   justify-content: center;
   margin-top: 25px;
-  color: white;
+  color: black;
   font-size: 1.1rem;
 }
 
